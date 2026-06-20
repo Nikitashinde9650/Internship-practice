@@ -1,0 +1,199 @@
+1.Technologies used in Python
+
+Web Development:
+Used to build websites, APIs, and web applications.
+
+A.	Technologies:
+•	Frontend integration with HTML, CSS, JavaScript
+•	REST APIs
+•	GraphQL
+•	Microservices
+•	Common Uses
+•	E-commerce websites
+•	Social media platforms
+•	Content management systems
+•	SaaS applications
+B. Data Science & Analytics:
+Used for analyzing large amounts of data.
+Technologies:
+•	Data cleaning                                
+•	Data visualization
+•	Statistical analysis
+•	Predictive analytics
+•	Libraries
+•	NumPy
+•	Pandas
+•	Matplotlib
+•	Seaborn
+•	Industries
+•	Finance
+•	Healthcare
+•	Retail
+•	Marketing
+C. Artificial Intelligence & Machine Learning:
+One of the biggest areas for Python.
+Technologies:
+•	Machine Learning
+•	Deep Learning
+•	Natural Language Processing (NLP)
+•	Computer Vision
+•	Generative AI
+•	Libraries
+•	Scikit-learn
+•	TensorFlow
+•	PyTorch
+•	Keras
+•	Examples
+•	Chatbots
+•	Recommendation systems
+•	Image recognition
+•	Voice assistants
+D. Automation & Scripting:
+Python can automate repetitive tasks.
+
+Examples:
+•	File management
+•	Email automation
+•	Data extraction
+•	Excel automation
+•	Report generation
+•	Libraries
+•	Selenium
+•	Beautiful Soup
+•	PyAutoGUI
+
+E. Cybersecurity:
+Python is heavily used in security testing.
+
+Applications:
+•	Penetration testing
+•	Security automation
+•	Malware analysis
+•	Network scanning
+•	Libraries
+•	Scapy
+•	Paramiko
+
+
+
+2.FRAMEWORK USED IN PYTHON
+
+1.Django:
+Django is a full-stack web framework.
+Used For
+•	Enterprise applications 
+•	E-commerce websites 
+•	Large web portals 
+•	Strong security 
+2. Flask
+Flask is lightweight and flexible.
+Used For
+•	APIs 
+•	Small to medium applications 
+•	Startup products 
+
+3. FastAPI
+FastAPI is a modern framework for APIs.
+Used For
+•	High-performance APIs 
+•	AI services 
+•	Microservices 
+4. Streamlit
+Streamlit helps build data dashboards.
+Used For
+•	AI demos 
+•	Data science dashboards 
+•	Internal business tools 
+
+5. PyTorch Framework
+PyTorch
+Used For
+•	Neural networks 
+•	Deep learning 
+•	AI research 
+
+6. TensorFlow
+TensorFlow
+Used For
+•	Large-scale AI systems 
+•	Production ML deployments 
+•	Computer vision
+
+
+3.REQUIRED SKILL SET
+Beginner Level
+Core Python
+•	Variables 
+•	Data types 
+•	Loops 
+•	Functions 
+•	OOP (Object-Oriented Programming) 
+•	Exception handling 
+Tools
+•	Git 
+•	GitHub 
+•	VS Code 
+
+Intermediate Level
+Database Knowledge
+•	SQL 
+•	MySQL 
+•	PostgreSQL 
+Entities:
+•	MySQL 
+•	PostgreSQL 
+APIs
+•	REST API development 
+•	JSON handling 
+
+Frameworks
+•	Django 
+•	Flask 
+•	FastAPI 
+Advanced Level
+Cloud Platforms
+•	Amazon Web Services (AWS) 
+•	Microsoft Azure 
+•	Google Cloud 
+DevOps Skills
+•	Docker 
+•	Kubernetes 
+•	CI/CD 
+AI/ML Skills
+•	Machine Learning 
+•	Deep Learning 
+•	LLM Applications 
+
+
+4.CARRER APOORTUNITY
+1.Python Developer
+2. Backend Developer
+3. Data Analyst
+4. Data Scientist
+5. Machine Learning Engineer
+6. AI Engineer
+7. Automation Engineer
+
+
+5.Future SCOPE
+1.Artificial Intelligence
+•	Generative AI 
+•	AI agents 
+•	LLM applications 
+2. Data Science
+•	Big data analytics 
+•	Business intelligence 
+3. Cloud Computing
+•	Cloud-native applications 
+•	Serverless computing 
+4. Cybersecurity
+•	Security automation 
+•	Threat intelligence 
+5. Automation
+•	Robotic Process Automation (RPA) 
+•	Business workflow automation 
+6. Scientific Research
+•	Healthcare 
+•	Biotechnology 
+•	Engineering simulations 
+
