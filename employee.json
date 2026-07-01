@@ -1,0 +1,16 @@
+[
+    {
+        "ID": 1,
+        "Name": "nikita",
+        "Department": "It",
+        "Salary": 26000.0,
+        "Joining Date": "2022-02-02"
+    },
+    {
+        "ID": 2,
+        "Name": "Vaishnavi",
+        "Department": "Hr",
+        "Salary": 22000.0,
+        "Joining Date": "2025-05-15"
+    }
+]
