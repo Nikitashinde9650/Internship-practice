@@ -3,31 +3,36 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
+# -------------------------------
 # Employee Table
+# -------------------------------
 class Employee(db.Model):
     __tablename__ = "employee"
 
-    Emp_ID = db.Column(db.Integer, primary_key=True)
-    Emp_Name = db.Column(db.String(100), nullable=False)
-    Department_Name = db.Column(db.String(100), nullable=False)
-    Salary = db.Column(db.Float, nullable=False)
-    Joining_Date = db.Column(db.Date, nullable=False)
-    Email = db.Column(db.String(100), nullable=False)
-    City = db.Column(db.String(100), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    ename = db.Column(db.String(30), nullable=False)
+    department = db.Column(db.String(30), nullable=False)
+    salary = db.Column(db.Integer, nullable=False)
+    joining_date = db.Column(db.Date, nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    city = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(255))
 
     def to_dict(self):
         return {
-            "Emp_ID": self.Emp_ID,
-            "Emp_Name": self.Emp_Name,
-            "Department_Name": self.Department_Name,
-            "Salary": self.Salary,
-            "Joining_Date": str(self.Joining_Date),
-            "Email": self.Email,
-            "City": self.City
+            "id": self.id,
+            "ename": self.ename,
+            "department": self.department,
+            "salary": self.salary,
+            "joining_date": str(self.joining_date),
+            "email": self.email,
+            "city": self.city
         }
 
 
+# -------------------------------
 # User Table
+# -------------------------------
 class User(db.Model):
     __tablename__ = "users"
 

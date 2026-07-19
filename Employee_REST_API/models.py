@@ -11,6 +11,7 @@ class Employee(db.Model):
     salary = db.Column(db.Float, nullable=False)
     joining_date = db.Column(db.Date, nullable=False)
     email = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
     city = db.Column(db.String(100), nullable=False)
 
     def to_dict(self):
