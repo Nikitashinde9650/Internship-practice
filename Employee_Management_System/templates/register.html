@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Register</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="login-box">
+
+            <h2>Employee Management System</h2>
+            <p class="subtitle">Create Your Account</p>
+
+            <form action="/register" method="POST">
+
+                <div class="input-box">
+                    <label>Full Name</label>
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Enter Full Name"
+                        required>
+                </div>
+
+                <div class="input-box">
+                    <label>Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter Email"
+                        required>
+                </div>
+
+                <div class="input-box">
+                    <label>Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter Password"
+                        required>
+                </div>
+
+                <div class="input-box">
+                    <label>Address</label>
+                    <textarea
+                        name="address"
+                        rows="3"
+                        placeholder="Enter Address"></textarea>
+                </div>
+
+                <div class="input-box">
+                    <label>City</label>
+                    <input
+                        type="text"
+                        name="city"
+                        placeholder="Enter City">
+                </div>
+
+                <div class="input-box">
+                    <label>Gender</label>
+
+                    <select name="gender">
+
+                        <option value="">Select Gender</option>
+
+                        <option value="Male">Male</option>
+
+                        <option value="Female">Female</option>
+
+                        <option value="Other">Other</option>
+
+                    </select>
+
+                </div>
+
+                <button type="submit">
+                    Register
+                </button>
+
+            </form>
+
+            <p class="register-text">
+                Already have an account?
+                <a href="/login-page">
+                    Login
+                </a>
+            </p>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
