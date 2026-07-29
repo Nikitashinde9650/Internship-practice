@@ -16,6 +16,8 @@ class Employee(db.Model):
     joining_date = db.Column(db.Date, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     city = db.Column(db.String(100), nullable=False)
+    status = db.Column(db.String(20), default="Active")
+    password = db.Column(db.String(200), nullable=False)
 
     def to_dict(self):
         return {
@@ -23,10 +25,10 @@ class Employee(db.Model):
             "ename": self.ename,
             "department": self.department,
             "salary": self.salary,
-            "joining_date": str(self.joining_date),
             "email": self.email,
-            "city": self.city
-        }
+            "city": self.city,
+            "status": self.status
+    }
 
 
 # -------------------------------

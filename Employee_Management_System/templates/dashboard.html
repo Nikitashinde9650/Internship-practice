@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+        <h2>EMS</h2>
+
+        <ul>
+            <li><a href="/dashboard">🏠 Dashboard</a></li>
+            <li><a href="/add_employee">➕ Add Employee</a></li>
+            <li><a href="/employees-page">👨 Employees</a></li>
+            <li><a href="/users">👤 Users</a></li>
+            <li><a href="/reports">📊 Reports</a></li>
+            <li><a href="/logout">🚪 Logout</a></li>
+        </ul>
+
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- Header -->
+        <div class="header">
+            <h1>Employee Dashboard</h1>
+        </div>
+
+        <!-- Welcome -->
+        <div class="welcome-box">
+            <h2>Welcome Admin 👋</h2>
+            <p>You have successfully logged in.</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="cards">
+
+            <!-- Total Employees -->
+            <a href="/employee-report" class="card-link">
+                <div class="card">
+                    <h3>Total Employees</h3>
+                    <h1>{{ total_employees }}</h1>
+                </div>
+            </a>
+
+            <!-- department -->
+            <a href="/department-report" class="card-link">
+                <div class="card">
+                    <h3>Departments</h3>
+                    <h1>{{ total_departments }}</h1>
+                </div>
+            </a>
+
+            <!-- Active Records -->
+            <a href="/active-records" class="card-link">
+                <div class="card">
+                    <h3>Active Records</h3>
+                    <h1>{{ active_records }}</h1>
+                </div>
+            </a>
+
+        </div>
+
+        <!-- Recently Added Employees -->
+        <div class="table-box">
+
+            <h2>Recently Added Employees</h2>
+
+            <table>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>City</th>
+                </tr>
+
+                {% for emp in recent_employees %}
+
+                <tr>
+                    <td>{{ emp.id }}</td>
+                    <td>{{ emp.ename }}</td>
+                    <td>{{ emp.department }}</td>
+                    <td>{{ emp.city }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

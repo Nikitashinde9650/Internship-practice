@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
+from flask import Flask, request, jsonify, render_template, redirect, url_for, flash,session
 from datetime import datetime
 from config import Config
 from models import db, Employee, User
+from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 app.secret_key = "employee123"
 
@@ -15,69 +16,52 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-
 # -------------------------------
 # Home Page
 # -------------------------------
 @app.route("/")
 def home():
-    return render_template("login.html")
+    return redirect(url_for("login_page"))
 
 
-# -------------------------------
-# Login UI
-# -------------------------------
-@app.route("/login-page")
+@app.route('/login-page')
 def login_page():
-    return render_template("login.html")
-
-
+    return render_template('login.html')
 # -------------------------------
-# Register UI
+# Login Page
+# -------------------------------
+@app.route('/login', methods=['POST'])
+def login():
+
+    email = request.form['email']
+    password = request.form['password']
+
+    user = User.query.filter_by(email=email).first()
+
+    print("EMAIL =", email)
+    print("USER FOUND =", user)
+
+    if user:
+        print("DB PASSWORD =", user.password)
+        print("CHECK =", check_password_hash(user.password, password))
+
+    if user and check_password_hash(user.password, password):
+
+        session['employee_id'] = user.id
+        session['employee_name'] = user.name
+
+        flash('Login Successful', 'success')
+        return redirect(url_for('dashboard'))
+
+    else:
+        flash('Invalid Email or Password', 'danger')
+        return redirect(url_for('login_page'))
+# -------------------------------
+# Register Page
 # -------------------------------
 @app.route("/register-page")
 def register_page():
     return render_template("register.html")
-
-
-# -------------------------------
-# Get All Employees
-# -------------------------------
-@app.route("/employees", methods=["GET"])
-def get_employees():
-
-    employees = Employee.query.all()
-
-    return jsonify([emp.to_dict() for emp in employees])
-
-
-# -------------------------------
-# Get Employee By ID
-# -------------------------------
-@app.route("/employees/<int:id>", methods=["GET"])
-def get_employee(id):
-
-    employee = db.session.get(Employee, id)
-
-    if employee is None:
-        return jsonify({
-            "message": "Employee Not Found"
-        }), 404
-
-    return jsonify(employee.to_dict())
-
-
-# -------------------------------
-# Get All Users
-# -------------------------------
-@app.route("/users", methods=["GET"])
-def get_users():
-
-    users = User.query.all()
-
-    return jsonify([user.to_dict() for user in users])
-
-
 # -------------------------------
 # Register API
 # -------------------------------
@@ -86,7 +70,6 @@ def register():
 
     try:
 
-        # HTML Form Values
         name = request.form.get("name")
         email = request.form.get("email")
         password = request.form.get("password")
@@ -94,270 +77,270 @@ def register():
         city = request.form.get("city")
         gender = request.form.get("gender")
 
-        # JSON Request (Postman)
-        if request.is_json:
-            data = request.get_json()
+        # Password hash kara
+        hashed_password = generate_password_hash(password)
 
-            name = data.get("name")
-            email = data.get("email")
-            password = data.get("password")
-            address = data.get("address")
-            city = data.get("city")
-            gender = data.get("gender")
+        existing_user = User.query.filter_by(email=email).first()
 
-        # Validation
-        if not name or not email or not password:
-            return jsonify({
-                "message": "Name, Email and Password are required"
-            }), 400
-
-        # Check Duplicate Email
-        user = User.query.filter_by(email=email).first()
-
-        if user:
+        if existing_user:
             return jsonify({
                 "message": "Email already exists"
             }), 400
 
-        # Create User
-        new_user = User(
+        user = User(
             name=name,
             email=email,
-            password=password,
+            password=hashed_password,
             address=address,
             city=city,
             gender=gender
         )
 
-        db.session.add(new_user)
+        db.session.add(user)
         db.session.commit()
 
-        # Browser मधून Register झालं तर Login Page ला Redirect
-        if not request.is_json:
-            return redirect(url_for("login_page"))
-
-        # Postman मधून Register झालं तर JSON Response
-        return jsonify({
-            "message": "User Registered Successfully"
-        }), 201
+        flash("Registration Successful. Please Login.", "success")
+        return redirect(url_for("login_page"))
 
     except Exception as e:
-
         db.session.rollback()
-
-        return jsonify({
-            "message": str(e)
-        }), 500
-    # -------------------------------
-# Login API
-# -------------------------------
-@app.route("/login", methods=["POST"])
-def login():
-
-    try:
-
-        email = request.form.get("email")
-        password = request.form.get("password")
-
-        if request.is_json:
-            data = request.get_json()
-            email = data.get("email")
-            password = data.get("password")
-
-        if not email or not password:
-            return jsonify({
-                "message": "Email and Password are required"
-            }), 400
-
-        user = User.query.filter_by(email=email).first()
-
-        if user is None:
-            return jsonify({
-                "message": "User Not Found"
-            }), 404
-
-        if user.password != password:
-            return jsonify({
-                "message": "Invalid Password"
-            }), 401
-
-        # Browser Login
-        if not request.is_json:
-            flash("Login Successful", "success")
-            return redirect(url_for("login_page"))
-
-        # Postman Login
-        return jsonify({
-            "message": "Login Successful",
-            "user": user.to_dict()
-        }), 200
-
-    except Exception as e:
         return jsonify({
             "message": str(e)
         }), 500
 
+# -------------------------------
+# Dashboard
+# -------------------------------
 
 # -------------------------------
-# Logout API
+# Save Employee
 # -------------------------------
-@app.route("/logout", methods=["POST"])
-def logout():
-    return redirect(url_for("login_page"))
+@app.route("/save-employee", methods=["POST"])
+def save_employee():
 
+    ename = request.form.get("ename")
+    department = request.form.get("department")
+    salary = request.form.get("salary")
+    joining_date = request.form.get("joining_date")
+    email = request.form.get("email")
+    city = request.form.get("city")
+    status = request.form.get("status")
 
-# -------------------------------
-# Add Employee
-# -------------------------------
-@app.route("/employees", methods=["POST"])
-def add_employee():
+    employee = Employee(
+        ename=ename,
+        department=department,
+        salary=salary,
+        joining_date=datetime.strptime(joining_date, "%Y-%m-%d").date(),
+        email=email,
+        city=city,
+        status=status,
+    )
 
-    try:
+    db.session.add(employee)
+    db.session.commit()
 
-        data = request.get_json()
+    flash("Employee Added Successfully", "success")
 
-        ename = data.get("ename")
-        department = data.get("department")
-        salary = data.get("salary")
-        joining_date = data.get("joining_date")
-        email = data.get("email")
-        city = data.get("city")
+    return redirect(url_for("employees_page"))
 
-        if not ename or not department or salary is None or not joining_date or not email or not city:
-            return jsonify({
-                "message": "All fields are required"
-            }), 400
-
-        if float(salary) <= 0:
-            return jsonify({
-                "message": "Salary must be greater than 0"
-            }), 400
-
-        existing_employee = Employee.query.filter_by(email=email).first()
-
-        if existing_employee:
-            return jsonify({
-                "message": "Employee Email already exists"
-            }), 400
-
-        joining_date = datetime.strptime(
-            joining_date,
-            "%Y-%m-%d"
-        ).date()
-
-        new_employee = Employee(
-            ename=ename,
-            department=department,
-            salary=salary,
-            joining_date=joining_date,
-            email=email,
-            city=city
-        )
-
-        db.session.add(new_employee)
-        db.session.commit()
-
-        return jsonify({
-            "message": "Employee Added Successfully"
-        }), 201
-
-    except Exception as e:
-
-        db.session.rollback()
-
-        return jsonify({
-            "message": str(e)
-        }), 500
-
-
-# -------------------------------
-# Update Employee
-# -------------------------------
-@app.route("/employees/<int:id>", methods=["PUT"])
+@app.route("/update_employee/<int:id>", methods=["PUT"])
 def update_employee(id):
 
-    try:
+    employee = Employee.query.get_or_404(id)
 
-        employee = db.session.get(Employee, id)
+    data = request.get_json()
 
-        if employee is None:
-            return jsonify({
-                "message": "Employee Not Found"
-            }), 404
+    employee.ename = data["name"]
+    employee.department = data["department"]
+    employee.salary = data["salary"]
+    employee.email = data["email"]
+    employee.city = data["city"]
 
-        data = request.get_json()
+    db.session.commit()
 
-        if "ename" in data:
-            employee.ename = data["ename"]
+    return jsonify({"message":"Employee Updated Successfully"})
 
-        if "department" in data:
-            employee.department = data["department"]
-
-        if "salary" in data:
-
-            if float(data["salary"]) <= 0:
-                return jsonify({
-                    "message": "Salary must be greater than 0"
-                }), 400
-
-            employee.salary = data["salary"]
-
-        if "joining_date" in data:
-            employee.joining_date = datetime.strptime(
-                data["joining_date"],
-                "%Y-%m-%d"
-            ).date()
-
-        if "email" in data:
-            employee.email = data["email"]
-
-        if "city" in data:
-            employee.city = data["city"]
-
-        db.session.commit()
-
-        return jsonify({
-            "message": "Employee Updated Successfully"
-        })
-
-    except Exception as e:
-
-        db.session.rollback()
-
-        return jsonify({
-            "message": str(e)
-        }), 500
-    # -------------------------------
+# -------------------------------
 # Delete Employee
 # -------------------------------
-@app.route("/employees/<int:id>", methods=["DELETE"])
+
+@app.route("/delete_employee/<int:id>", methods=["DELETE"])
 def delete_employee(id):
 
-    try:
+    employee = Employee.query.get(id)
 
-        employee = db.session.get(Employee, id)
-
-        if employee is None:
-            return jsonify({
-                "message": "Employee Not Found"
-            }), 404
-
-        db.session.delete(employee)
-        db.session.commit()
-
+    if not employee:
         return jsonify({
-            "message": "Employee Deleted Successfully"
-        }), 200
-
-    except Exception as e:
-
-        db.session.rollback()
-
-        return jsonify({
-            "message": str(e)
-        }), 500
+            "message":"Employee not found"
+        }),404
 
 
+    db.session.delete(employee)
+    db.session.commit()
+
+
+    return jsonify({
+        "message":"Employee Deleted Successfully"
+    })
+
+
+
+# -------------------------------
+# Search Employee
+# -------------------------------
+
+@app.route("/search_employee", methods=["GET"])
+def search_employee():
+
+    name = request.args.get("name", "")
+
+    employees = Employee.query.filter(
+        Employee.ename.like(f"%{name}%")
+    ).all()
+
+    return jsonify([emp.to_dict() for emp in employees])
+
+# -------------------------------
+# Get Single Employee
+# -------------------------------
+
+@app.route("/get_employee/<int:id>")
+def get_employee(id):
+
+    employee = Employee.query.get_or_404(id)
+
+    return jsonify(employee.to_dict())
+# -------------------------------
+# Edit Employee Page
+# -------------------------------
+
+@app.route("/edit_employee")
+def edit_employee():
+
+    return render_template("edit_employee.html")
+
+@app.route("/add_employee")
+def add_employee():
+
+    return render_template("add_employee.html")
+
+#--------Add Employee------
+
+@app.route("/employees-page")
+def employees_page():
+
+    employees = Employee.query.all()
+
+    return render_template(
+        "employees.html",
+        employees=employees
+    )  
+
+# ------------User ---------
+
+@app.route("/users")
+def users():
+
+    users = User.query.all()
+
+    return render_template(
+        "users.html",
+        users=users
+    )
+
+#---------Report--------
+
+@app.route("/reports")
+def reports():
+
+    total_employees = Employee.query.count()
+
+    total_users = User.query.count()
+
+    return render_template(
+        "reports.html",
+        total_employees=total_employees,
+        total_users=total_users
+    )
+#------------total-employee card-----
+@app.route("/employee-report")
+def employee_report():
+
+    employees = Employee.query.all()
+
+    return render_template(
+        "employee_report.html",
+        employees=employees
+    )
+#-----Department---------
+from sqlalchemy import func
+from flask import session, flash, redirect, render_template
+
+@app.route("/dashboard")
+def dashboard():
+
+    # Login check
+    if 'employee_id' not in session:
+        flash('Please login first', 'danger')
+        return redirect('/')
+
+    # Total employees
+    total_employees = Employee.query.count()
+
+    # Total departments
+    total_departments = db.session.query(
+        func.count(func.distinct(Employee.department))
+    ).scalar()
+
+    # Active employees
+    active_records = Employee.query.filter_by(status="Active").count()
+
+    # Recent employees
+    recent_employees = Employee.query.order_by(
+        Employee.id.desc()
+    ).limit(5).all()
+
+    return render_template(
+        "dashboard.html",
+        total_employees=total_employees,
+        total_departments=total_departments,
+        active_records=active_records,
+        recent_employees=recent_employees
+    )
+#----------DEpartment route------
+@app.route("/department-report")
+def department_report():
+
+    employees = Employee.query.order_by(Employee.department).all()
+
+    return render_template(
+        "department_report.html",
+        employees=employees
+    )
+#-------------Active Records---------
+@app.route("/active-records")
+def active_records():
+
+    employees = Employee.query.filter_by(status="Active").all()
+
+    return render_template(
+        "active_records.html",
+        employees=employees
+    )
+#-------------logout-----------------
+# Logout confirmation page
+@app.route('/logout')
+def logout_page():
+    return render_template('logout.html')
+
+# Final logout action
+@app.route('/do-logout', methods=['POST'])
+def do_logout():
+
+    session.clear()
+    flash('Logout Successful', 'success')
+
+    return redirect(url_for('login_page'))
 # -------------------------------
 # Run Application
 # -------------------------------

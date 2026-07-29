@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Users</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f4f6f9;
+    margin:0;
+}
+
+.container{
+    width:90%;
+    margin:30px auto;
+}
+
+h1{
+    color:#1d3d77;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+th{
+    background:#1d3d77;
+    color:white;
+    padding:12px;
+}
+
+td{
+    padding:10px;
+    border:1px solid #ddd;
+    text-align:center;
+}
+
+tr:nth-child(even){
+    background:#f2f2f2;
+}
+
+.back-btn{
+    display:inline-block;
+    margin-bottom:20px;
+    padding:10px 20px;
+    background:#1d3d77;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Users</h1>
+
+<a href="/dashboard" class="back-btn">
+← Dashboard
+</a>
+
+<table>
+
+<tr>
+
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Address</th>
+<th>City</th>
+<th>Gender</th>
+
+</tr>
+
+{% for user in users %}
+
+<tr>
+
+<td>{{user.id}}</td>
+
+<td>{{user.name}}</td>
+
+<td>{{user.email}}</td>
+
+<td>{{user.address}}</td>
+
+<td>{{user.city}}</td>
+
+<td>{{user.gender}}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+</html>

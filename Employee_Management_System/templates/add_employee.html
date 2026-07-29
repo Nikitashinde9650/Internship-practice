@@ -1,0 +1,157 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Add Employee</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+
+<style>
+
+body{
+    background:#f4f6f9;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.container-box{
+    width:500px;
+    margin:40px auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0px 2px 10px rgba(0,0,0,0.15);
+}
+
+h2{
+    text-align:center;
+    color:#1f3b73;
+    margin-bottom:20px;
+}
+
+label{
+    font-weight:bold;
+    color:#333;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px;
+    margin:8px 0 18px 0;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:15px;
+}
+
+input:focus,
+select:focus{
+    border-color:#1f3b73;
+    outline:none;
+    box-shadow:0 0 5px rgba(31,59,115,0.3);
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:#1f3b73;
+    color:white;
+    border:none;
+    border-radius:6px;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#2d5ca6;
+}
+
+.back-btn{
+    display:block;
+    text-align:center;
+    margin-top:15px;
+    text-decoration:none;
+    color:#1f3b73;
+    font-weight:bold;
+}
+
+.back-btn:hover{
+    text-decoration:underline;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container-box">
+
+    <h2>Add Employee</h2>
+
+    <form action="/save-employee" method="POST">
+
+        <label>Employee Name</label>
+        <input
+            type="text"
+            name="ename"
+            placeholder="Enter Employee Name"
+            required>
+
+        <label>Department</label>
+        <input
+            type="text"
+            name="department"
+            placeholder="Enter Department"
+            required>
+
+        <label>Salary</label>
+        <input
+            type="number"
+            name="salary"
+            placeholder="Enter Salary"
+            required>
+
+        <label>Joining Date</label>
+        <input
+            type="date"
+            name="joining_date"
+            required>
+
+        <label>Email</label>
+        <input
+            type="email"
+            name="email"
+            placeholder="Enter Email"
+            required>
+
+        <label>City</label>
+        <input
+            type="text"
+            name="city"
+            placeholder="Enter City"
+            required>
+
+        <label>Status</label>
+        <select name="status" required>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+        </select>
+
+        <button type="submit">
+            Add Employee
+        </button>
+
+    </form>
+
+    <a href="/dashboard" class="back-btn">⬅ Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>
+```

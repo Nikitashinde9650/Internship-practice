@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Department Report</title>
+
+    <style>
+        body{
+            font-family:Arial;
+            background:#f4f4f4;
+            padding:30px;
+        }
+
+        h2{
+            color:#1f3b73;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:white;
+        }
+
+        th,td{
+            border:1px solid #ddd;
+            padding:12px;
+            text-align:center;
+        }
+
+        th{
+            background:#1f3b73;
+            color:white;
+        }
+
+        tr:nth-child(even){
+            background:#f2f2f2;
+        }
+
+        a{
+            display:inline-block;
+            margin-top:20px;
+            text-decoration:none;
+            color:#1f3b73;
+            font-weight:bold;
+        }
+    </style>
+
+</head>
+<body>
+
+<h2>Department Report</h2>
+
+<table>
+
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Department</th>
+    <th>City</th>
+</tr>
+
+{% for emp in employees %}
+
+<tr>
+    <td>{{ emp.id }}</td>
+    <td>{{ emp.ename }}</td>
+    <td>{{ emp.department }}</td>
+    <td>{{ emp.city }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<a href="/dashboard">⬅ Back to Dashboard</a>
+
+</body>
+</html>

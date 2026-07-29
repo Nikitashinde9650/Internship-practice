@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Employee</title>
+
+
+    <style>
+
+        body{
+            font-family: Arial, sans-serif;
+            background:#f4f6f9;
+        }
+
+
+        .container{
+
+            width:400px;
+            margin:50px auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 0 10px gray;
+
+        }
+
+
+        h2{
+
+            text-align:center;
+            color:#333;
+
+        }
+
+
+        input{
+
+            width:100%;
+            padding:12px;
+            margin:10px 0;
+            border:1px solid #ccc;
+            border-radius:5px;
+
+        }
+
+
+        button{
+
+            width:100%;
+            padding:12px;
+            background:#007bff;
+            color:white;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+            font-size:16px;
+
+        }
+
+
+        button:hover{
+
+            background:#0056b3;
+
+        }
+
+
+    </style>
+
+
+</head>
+
+
+
+<body>
+
+
+
+<div class="container">
+
+
+<h2>Edit Employee</h2>
+
+
+
+<input type="text" id="name" placeholder="Employee Name">
+
+
+<input type="text" id="department" placeholder="Department">
+
+
+<input type="number" id="salary" placeholder="Salary">
+
+
+<input type="email" id="email" placeholder="Email">
+
+
+<input type="text" id="city" placeholder="City">
+
+
+<button onclick="updateEmployee()">
+
+Update Employee
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+<script>
+
+
+// Get Employee ID
+
+let id = localStorage.getItem("emp_id");
+
+
+
+// Load Existing Employee Data
+
+fetch(`/get_employee/${id}`)
+
+
+.then(response=>response.json())
+
+
+.then(emp=>{
+
+
+document.getElementById("name").value = emp.Emp_Name;
+
+document.getElementById("department").value = emp.Department_Name;
+
+document.getElementById("salary").value = emp.Salary;
+
+document.getElementById("email").value = emp.Email;
+
+document.getElementById("city").value = emp.City;
+
+
+});
+
+
+
+
+
+
+
+// Update Employee
+
+
+function updateEmployee(){
+
+
+let data = {
+
+
+name:
+document.getElementById("name").value,
+
+
+department:
+document.getElementById("department").value,
+
+
+salary:
+document.getElementById("salary").value,
+
+
+email:
+document.getElementById("email").value,
+
+
+city:
+document.getElementById("city").value
+
+
+};
+
+
+
+
+fetch(`/update_employee/${id}`,{
+
+
+method:"PUT",
+
+
+headers:{
+
+
+"Content-Type":"application/json"
+
+
+},
+
+
+body:JSON.stringify(data)
+
+
+})
+
+
+
+.then(response=>response.json())
+
+
+.then(result=>{
+
+
+alert(result.message);
+
+
+window.location.href="/dashboard";
+
+
+});
+
+
+
+}
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
