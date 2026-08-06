@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+
+<div class="main-content">
+
+```
+<div class="table-box" style="max-width:600px;margin:auto;">
+    <h2>My Profile</h2>
+
+    <table>
+        <tr><th>Name</th><td>{{ user.name }}</td></tr>
+        <tr><th>Email</th><td>{{ user.email }}</td></tr>
+        <tr><th>City</th><td>{{ user.city }}</td></tr>
+        <tr><th>Gender</th><td>{{ user.gender }}</td></tr>
+        <tr><th>Role</th><td>{{ user.role }}</td></tr>
+    </table>
+
+    <div style="text-align:center;">
+        <a href="{{ url_for('user_dashboard') }}" class="back-btn">← Back to Dashboard</a>
+    </div>
+</div>
+```
+
+</div>
+
+</body>
+</html>

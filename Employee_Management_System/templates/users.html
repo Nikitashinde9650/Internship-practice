@@ -64,10 +64,7 @@ tr:nth-child(even){
 
 <h1>Users</h1>
 
-<a href="/dashboard" class="back-btn">
-← Dashboard
-</a>
-
+<a href="{{ url_for('admin_dashboard') if session.get('role') == 'admin' else url_for('user_dashboard') }}">Back to Dashboard</a>
 <table>
 
 <tr>

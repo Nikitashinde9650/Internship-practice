@@ -44,6 +44,7 @@ class User(db.Model):
     address = db.Column(db.Text, nullable=True)
     city = db.Column(db.String(50), nullable=True)
     gender = db.Column(db.String(20), nullable=True)
+    role = db.Column(db.String(20), default='user')   # admin or user
 
     def to_dict(self):
         return {
@@ -54,3 +55,4 @@ class User(db.Model):
             "city": self.city,
             "gender": self.gender
         }
+   

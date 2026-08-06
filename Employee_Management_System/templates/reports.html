@@ -102,9 +102,7 @@ border-radius:5px;
 
 <h1>Reports Dashboard</h1>
 
-<a href="/dashboard" class="back-btn">
-← Dashboard
-</a>
+<a href="{{ url_for('admin_dashboard') if session.get('role') == 'admin' else url_for('user_dashboard') }}">Back to Dashboard</a>
 
 <div class="cards">
 

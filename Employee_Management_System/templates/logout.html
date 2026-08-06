@@ -1,5 +1,5 @@
-
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -43,7 +43,7 @@ body{
 .logout-btn{
     width:100%;
     padding:14px;
-    background:#1f3b73;
+    background:#dc3545; /* red button */
     color:white;
     border:none;
     border-radius:8px;
@@ -53,7 +53,7 @@ body{
 }
 
 .logout-btn:hover{
-    background:#2d5ca6;
+    background:#bb2d3b;
 }
 
 .cancel-link{
@@ -75,18 +75,21 @@ body{
 
 <div class="logout-box">
 
-    <h1>Employee Management System</h1>
 
-    <p>Are you sure you want to logout?</p>
+<h1>Employee Management System</h1>
 
-    <form action="/do-logout" method="POST">
-        <button type="submit" class="logout-btn">Logout</button>
-    </form>
+<p>Are you sure you want to logout?</p>
 
-    <a href="/dashboard" class="cancel-link">Cancel</a>
+<!-- Logout button -->
+<form action="{{ url_for('do_logout') }}" method="POST">
+    <button type="submit" class="logout-btn">Logout</button>
+</form>
+
+<!-- Cancel -->
+<a href="javascript:history.back()" class="cancel-link">Cancel</a>
+
 
 </div>
 
 </body>
 </html>
-

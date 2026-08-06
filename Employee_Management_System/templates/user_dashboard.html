@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+
+```
+<link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+```
+
+</head>
+<body>
+
+<div class="container">
+
+```
+<!-- Sidebar -->
+<div class="sidebar">
+    <h2>EMS</h2>
+
+    <ul>
+        <li><a href="{{ url_for('user_dashboard') }}">🏠 Dashboard</a></li>
+        <li><a href="{{ url_for('my_profile') }}">👤 My Profile</a></li>
+        <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+    </ul>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+
+    <div class="header">
+        <h1>User Dashboard</h1>
+    </div>
+
+    <div class="welcome-box">
+        <h2>Welcome {{ session.get('user_name') }} 👋</h2>
+        <p>You have successfully logged in as User.</p>
+    </div>
+
+    <!-- User cards -->
+    <div class="cards">
+
+        <div class="card">
+            <h3>My Account</h3>
+            <h1>👤</h1>
+        </div>
+
+        <div class="card">
+            <h3>Role</h3>
+            <h1>{{ session.get('role') }}</h1>
+        </div>
+
+    </div>
+
+    <!-- Charts -->
+    <div class="chart-container">
+
+        <div class="chart-box">
+            <h2>Employees by Department</h2>
+            <canvas id="employeeBarChart"></canvas>
+        </div>
+
+        <div class="chart-box">
+            <h2>Department Distribution</h2>
+            <canvas id="departmentPieChart"></canvas>
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const labels = {{ labels | tojson }};
+const counts = {{ counts | tojson }};
+
+new Chart(document.getElementById('employeeBarChart'), {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            data: counts,
+            backgroundColor: ['#14b8a6','#6366f1','#f59e0b','#ef4444','#10b981']
+        }]
+    }
+});
+
+new Chart(document.getElementById('departmentPieChart'), {
+    type: 'pie',
+    data: {
+        labels: labels,
+        datasets: [{
+            data: counts,
+            backgroundColor: ['#14b8a6','#6366f1','#f59e0b','#ef4444','#10b981']
+        }]
+    }
+});
+</script>
+
+</body>
+</html>

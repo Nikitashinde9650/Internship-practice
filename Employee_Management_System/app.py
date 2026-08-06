@@ -1,15 +1,38 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash,session
-from datetime import datetime
+from datetime import datetime, timedelta
 from config import Config
 from models import db, Employee, User
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import (
+    JWTManager,
+    create_access_token,
+    create_refresh_token,
+    jwt_required,
+    get_jwt_identity
+)
+
 app = Flask(__name__)
+app.config.from_object(Config)
+
+# Session timeout apply
+app.permanent_session_lifetime = app.config['PERMANENT_SESSION_LIFETIME']
+
+jwt = JWTManager(app)
 app.secret_key = "employee123"
+# Session 30 minutes nantar expire hoil
+app.permanent_session_lifetime = timedelta(minutes=30)
 
 # -------------------------------
 # Config
 # -------------------------------
 app.config.from_object(Config)
+
+# Session timeout apply
+app.permanent_session_lifetime = app.config['PERMANENT_SESSION_LIFETIME']
+
+jwt = JWTManager(app)
+app.config['JWT_SECRET_KEY'] = 'super-secret-key'
+jwt = JWTManager(app)
 
 db.init_app(app)
 
@@ -30,32 +53,7 @@ def login_page():
 # -------------------------------
 # Login Page
 # -------------------------------
-@app.route('/login', methods=['POST'])
-def login():
 
-    email = request.form['email']
-    password = request.form['password']
-
-    user = User.query.filter_by(email=email).first()
-
-    print("EMAIL =", email)
-    print("USER FOUND =", user)
-
-    if user:
-        print("DB PASSWORD =", user.password)
-        print("CHECK =", check_password_hash(user.password, password))
-
-    if user and check_password_hash(user.password, password):
-
-        session['employee_id'] = user.id
-        session['employee_name'] = user.name
-
-        flash('Login Successful', 'success')
-        return redirect(url_for('dashboard'))
-
-    else:
-        flash('Invalid Email or Password', 'danger')
-        return redirect(url_for('login_page'))
 # -------------------------------
 # Register Page
 # -------------------------------
@@ -81,6 +79,7 @@ def register():
         hashed_password = generate_password_hash(password)
 
         existing_user = User.query.filter_by(email=email).first()
+        role="user"
 
         if existing_user:
             return jsonify({
@@ -219,22 +218,33 @@ def edit_employee():
 
     return render_template("edit_employee.html")
 
-@app.route("/add_employee")
+#-----------add employee-------------------
+@app.route('/add_employee')
 def add_employee():
 
-    return render_template("add_employee.html")
+    # Fakt admin la access
+    if session.get('role') != 'admin':
+        flash('Only admin can add employees', 'danger')
+        return redirect(url_for('user_dashboard'))
+
+    return render_template('add_employee.html')
 
 #--------Add Employee------
 
-@app.route("/employees-page")
+@app.route('/employees-page')
 def employees_page():
+
+    # Login check
+    if 'user_id' not in session:
+        flash('Please login first', 'danger')
+        return redirect(url_for('login_page'))
 
     employees = Employee.query.all()
 
     return render_template(
-        "employees.html",
+        'employees.html',
         employees=employees
-    )  
+    )
 
 # ------------User ---------
 
@@ -330,10 +340,14 @@ def active_records():
 #-------------logout-----------------
 # Logout confirmation page
 @app.route('/logout')
-def logout_page():
+def logout():
     return render_template('logout.html')
 
-# Final logout action
+
+# Actual logout
+
+
+# --------------Final logout action--------------------
 @app.route('/do-logout', methods=['POST'])
 def do_logout():
 
@@ -341,6 +355,180 @@ def do_logout():
     flash('Logout Successful', 'success')
 
     return redirect(url_for('login_page'))
+@app.route('/login', methods=['POST'])
+def login():
+
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    # User shodha
+    user = User.query.filter_by(email=email).first()
+
+    if user and user.password == password:
+
+        session.permanent = True
+
+        session['user_id'] = user.id
+        session['user_name'] = user.name
+        session['role'] = user.role
+
+        flash('Login Successful', 'success')
+
+        if user.role == 'admin':
+            return redirect(url_for('admin_dashboard'))
+        else:
+            return redirect(url_for('user_dashboard'))
+
+    flash('Email id or password is incorrect', 'danger')
+    return redirect(url_for('login_page'))
+#--------------admin-dashboard--------------
+@app.route('/admin-dashboard')
+def admin_dashboard():
+
+    # Admin check
+    if session.get('role') != 'admin':
+        flash('Access Denied', 'danger')
+        return redirect(url_for('login_page'))
+
+    # Total employees
+    total_employees = Employee.query.count()
+
+    # Total departments
+    total_departments = db.session.query(
+        func.count(func.distinct(Employee.department))
+    ).scalar()
+
+    # Active employees
+    active_records = Employee.query.filter_by(status='Active').count()
+
+    # Department wise employee count
+    department_data = db.session.query(
+        Employee.department,
+        func.count(Employee.id)
+    ).group_by(Employee.department).all()
+
+    labels = [d[0] for d in department_data]
+    counts = [d[1] for d in department_data]
+
+    return render_template(
+        'dashboard.html',
+        total_employees=total_employees,
+        total_departments=total_departments,
+        active_records=active_records,
+        labels=labels,
+        counts=counts
+    )
+#--------------user dashboard-------------
+@app.route('/user-dashboard')
+def user_dashboard():
+
+    if session.get('role') != 'user':
+        flash('Access Denied', 'danger')
+        return redirect(url_for('login_page'))
+
+    total_employees = Employee.query.count()
+
+    total_departments = db.session.query(
+        func.count(func.distinct(Employee.department))
+    ).scalar()
+
+    active_records = Employee.query.filter_by(status='Active').count()
+
+    department_data = db.session.query(
+        Employee.department,
+        func.count(Employee.id)
+    ).group_by(Employee.department).all()
+
+    labels = [d[0] for d in department_data]
+    counts = [d[1] for d in department_data]
+
+    return render_template(
+        'user_dashboard.html',
+        total_employees=total_employees,
+        total_departments=total_departments,
+        active_records=active_records,
+        labels=labels,
+        counts=counts
+    )
+#----------my profile-----------
+@app.route('/my-profile')
+def my_profile():
+
+    if 'user_id' not in session:
+        flash('Please login first', 'danger')
+        return redirect(url_for('login_page'))
+
+    user = User.query.get(session['user_id'])
+
+    return render_template('my_profile.html', user=user)
+#---------------JWT API Tocken-------------
+@app.route('/api/login', methods=['POST'])
+def api_login():
+
+    data = request.get_json()
+
+    email = data.get('email')
+    password = data.get('password')
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user or user.password != password:
+        return jsonify({'message': 'Invalid email or password'}), 401
+
+    identity_data = {
+        'id': user.id,
+        'email': user.email,
+        'role': user.role
+    }
+
+    access_token = create_access_token(identity=identity_data)
+
+    refresh_token = create_refresh_token(identity=identity_data)
+
+    return jsonify({
+        'message': 'Login Successful',
+        'access_token': access_token,
+        'refresh_token': refresh_token,
+        'role': user.role
+    }), 200
+#----JWT Protected route-------------
+@app.route('/api/profile', methods=['GET'])
+@jwt_required()
+def api_profile():
+
+    current_user = get_jwt_identity()
+
+    return jsonify({
+        'message': 'Protected Route Accessed',
+        'user': current_user
+    }), 200
+#------------admin protected route----------
+@app.route('/api/admin-only', methods=['GET'])
+@jwt_required()
+def admin_only():
+
+    current_user = get_jwt_identity()
+
+    if current_user['role'] != 'admin':
+        return jsonify({'message': 'Admin access required'}), 403
+
+    return jsonify({
+        'message': 'Welcome Admin',
+        'user': current_user
+    }), 200
+#-----refresh tocken------------------
+@app.route('/api/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh():
+
+    current_user = get_jwt_identity()
+
+    new_access_token = create_access_token(identity=current_user)
+
+    return jsonify({
+        'access_token': new_access_token
+    }), 200
+
 # -------------------------------
 # Run Application
 # -------------------------------

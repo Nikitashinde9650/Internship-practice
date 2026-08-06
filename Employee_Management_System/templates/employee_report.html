@@ -105,8 +105,25 @@
 
     </table>
 
-    <a href="/dashboard" class="back-btn">⬅ Back to Dashboard</a>
-
+<div style="text-align:center; margin-top:30px;">
+    <a href="{{ url_for('admin_dashboard') if session.get('role') == 'admin' else url_for('user_dashboard') }}"
+       style="
+            display:inline-block;
+            background:#1f3b73;
+            color:white;
+            padding:12px 22px;
+            border-radius:8px;
+            text-decoration:none;
+            font-size:16px;
+            font-weight:bold;
+            box-shadow:0 2px 8px rgba(0,0,0,0.2);
+            transition:0.3s;
+       "
+       onmouseover="this.style.background='#2d5ca6'"
+       onmouseout="this.style.background='#1f3b73'">
+        ← Back to Dashboard
+    </a>
+</div>
 </div>
 
 </body>

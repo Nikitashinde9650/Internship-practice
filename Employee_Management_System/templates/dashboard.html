@@ -17,12 +17,12 @@
         <h2>EMS</h2>
 
         <ul>
-            <li><a href="/dashboard">🏠 Dashboard</a></li>
+            <li><a href="{{ url_for('admin_dashboard') if session.get('role') == 'admin' else url_for('user_dashboard') }}">Back to Dashboard</a></li>
             <li><a href="/add_employee">➕ Add Employee</a></li>
             <li><a href="/employees-page">👨 Employees</a></li>
             <li><a href="/users">👤 Users</a></li>
             <li><a href="/reports">📊 Reports</a></li>
-            <li><a href="/logout">🚪 Logout</a></li>
+            <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
         </ul>
 
     </div>
@@ -71,34 +71,114 @@
         </div>
 
         <!-- Recently Added Employees -->
-        <div class="table-box">
+        <!-- Charts Section -->
+<div class="chart-container">
 
-            <h2>Recently Added Employees</h2>
+    <div class="chart-box">
+        <h2>Employees by Department</h2>
+        <canvas id="employeeBarChart"></canvas>
+    </div>
 
-            <table>
+    <div class="chart-box">
+        <h2>Department Distribution</h2>
+        <canvas id="departmentPieChart"></canvas>
+    </div>
 
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Department</th>
-                    <th>City</th>
-                </tr>
+</div>
 
-                {% for emp in recent_employees %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-                <tr>
-                    <td>{{ emp.id }}</td>
-                    <td>{{ emp.ename }}</td>
-                    <td>{{ emp.department }}</td>
-                    <td>{{ emp.city }}</td>
-                </tr>
+<script>
 
-                {% endfor %}
+const labels = {{ labels | tojson }};
+const counts = {{ counts | tojson }};
 
-            </table>
+// ===== Bar Chart =====
+new Chart(document.getElementById('employeeBarChart'), {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Employees',
+            data: counts,
+            backgroundColor: [
+                '#14b8a6',
+                '#6366f1',
+                '#f59e0b',
+                '#ef4444',
+                '#10b981'
+            ],
+            borderColor: '#ffffff',
+            borderWidth: 2,
+            borderRadius: 8
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: '#0f172a',
+                    font: { size: 13, weight: '600' }
+                },
+                grid: {
+                    color: '#e2e8f0'
+                }
+            },
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    color: '#0f172a',
+                    stepSize: 1,
+                    font: { size: 13, weight: '600' }
+                },
+                grid: {
+                    color: '#e2e8f0'
+                }
+            }
+        }
+    }
+});
 
-        </div>
+// ===== Pie Chart =====
+new Chart(document.getElementById('departmentPieChart'), {
+    type: 'pie',
+    data: {
+        labels: labels,
+        datasets: [{
+            data: counts,
+            backgroundColor: [
+                '#14b8a6',
+                '#6366f1',
+                '#f59e0b',
+                '#ef4444',
+                '#10b981'
+            ],
+            borderColor: '#ffffff',
+            borderWidth: 3
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    color: '#0f172a',
+                    font: { size: 13, weight: '600' },
+                    padding: 15
+                }
+            }
+        }
+    }
+});
 
+</script>
     </div>
 
 </div>
