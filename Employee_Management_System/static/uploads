@@ -1,0 +1,45 @@
+import os
+from werkzeug.utils import secure_filename
+
+# Upload folder configuration
+UPLOAD_FOLDER = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+@app.route('/upload-photo', methods=['POST'])
+def upload_photo():
+
+    # User login check
+    if 'user_id' not in session:
+        flash('Please login first', 'danger')
+        return redirect(url_for('login_page'))
+
+    # File get from form
+    file = request.files.get('photo')
+
+    # File selected ka check
+    if file is None or file.filename == '':
+        flash('Please select a photo', 'warning')
+        return redirect(url_for('my_profile'))
+
+    # Safe filename
+    filename = secure_filename(file.filename)
+
+    # uploads folder automatically create
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+    # File path
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+    # Save file
+    file.save(file_path)
+
+    # Database update
+    user = User.query.get(session['user_id'])
+    user.profile_photo = filename
+
+    db.session.commit()
+
+    flash('Profile photo uploaded successfully', 'success')
+
+    return redirect(url_for('my_profile'))

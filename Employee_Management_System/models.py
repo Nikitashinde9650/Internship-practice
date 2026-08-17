@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-
+from datetime import datetime
 db = SQLAlchemy()
 
 
@@ -18,6 +18,11 @@ class Employee(db.Model):
     city = db.Column(db.String(100), nullable=False)
     status = db.Column(db.String(20), default="Active")
     password = db.Column(db.String(200), nullable=False)
+    is_deleted = db.Column(db.Boolean, default=False)
+    createdBy = db.Column(db.String(100))
+    createdDate = db.Column(db.DateTime)
+    updatedBy = db.Column(db.String(100))   
+    updatedDate = db.Column(db.DateTime)
 
     def to_dict(self):
         return {
@@ -44,7 +49,8 @@ class User(db.Model):
     address = db.Column(db.Text, nullable=True)
     city = db.Column(db.String(50), nullable=True)
     gender = db.Column(db.String(20), nullable=True)
-    role = db.Column(db.String(20), default='user')   # admin or user
+    role = db.Column(db.String(20), default='users')   # admin or user
+    profile_photo = db.Column(db.String(200))
 
     def to_dict(self):
         return {

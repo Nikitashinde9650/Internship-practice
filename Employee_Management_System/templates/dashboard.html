@@ -18,9 +18,9 @@
 
         <ul>
             <li><a href="{{ url_for('admin_dashboard') if session.get('role') == 'admin' else url_for('user_dashboard') }}">Back to Dashboard</a></li>
+            <li><a href="javascript:void(0)" onclick="viewProfile()">👤 View Profile</a></li>
             <li><a href="/add_employee">➕ Add Employee</a></li>
             <li><a href="/employees-page">👨 Employees</a></li>
-            <li><a href="/users">👤 Users</a></li>
             <li><a href="/reports">📊 Reports</a></li>
             <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
         </ul>
@@ -182,6 +182,12 @@ new Chart(document.getElementById('departmentPieChart'), {
     </div>
 
 </div>
+<script>
 
+function viewProfile(){
+    window.location.href = "{{ url_for('my_profile') }}";
+}
+
+</script>
 </body>
 </html>

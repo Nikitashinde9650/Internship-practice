@@ -3,30 +3,377 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+
+```
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:'Poppins', sans-serif;
+    }
+
+    body{
+        background:linear-gradient(135deg,#1f3b73,#355ca8);
+        min-height:100vh;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        padding:30px;
+    }
+
+    .profile-container{
+        width:100%;
+        max-width:900px;
+        background:#fff;
+        border-radius:26px;
+        padding:40px;
+        box-shadow:0 18px 40px rgba(0,0,0,0.18);
+    }
+
+    .profile-header{
+        text-align:center;
+        margin-bottom:35px;
+    }
+
+    .profile-photo{
+        width:150px;
+        height:150px;
+        border-radius:50%;
+        object-fit:cover;
+        border:5px solid #1f3b73;
+        margin-bottom:18px;
+        box-shadow:0 8px 20px rgba(31,59,115,0.25);
+    }
+
+    .default-photo{
+        width:150px;
+        height:150px;
+        border-radius:50%;
+        background:#e8eefc;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        margin:0 auto 18px;
+        font-size:56px;
+        color:#1f3b73;
+        border:5px solid #1f3b73;
+    }
+
+    .profile-header h1{
+        color:#1f3b73;
+        font-size:2.2rem;
+        margin-bottom:6px;
+    }
+
+    .profile-header p{
+        color:#64748b;
+        font-size:1rem;
+    }
+
+    .info-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+        gap:18px;
+        margin-bottom:30px;
+    }
+
+    .info-card{
+        background:#f7f9ff;
+        border:1px solid #e3e9ff;
+        border-radius:16px;
+        padding:20px;
+    }
+
+    .info-card span{
+        display:block;
+        font-size:13px;
+        color:#6b7280;
+        margin-bottom:6px;
+    }
+
+    .info-card strong{
+        color:#111827;
+        font-size:15px;
+    }
+
+    .section{
+        margin-top:26px;
+        padding:24px;
+        border:1px solid #eef2ff;
+        border-radius:18px;
+        background:#fcfdff;
+    }
+
+    .section h2{
+        color:#1f3b73;
+        font-size:1.25rem;
+        margin-bottom:18px;
+        display:flex;
+        align-items:center;
+        gap:10px;
+    }
+
+    .form-group{
+        margin-bottom:16px;
+    }
+
+    .form-group label{
+        display:block;
+        margin-bottom:7px;
+        font-weight:500;
+        color:#374151;
+    }
+
+    .form-group input{
+        width:100%;
+        padding:13px 14px;
+        border:1px solid #d1d5db;
+        border-radius:12px;
+        font-size:15px;
+        transition:0.3s;
+        background:#fff;
+    }
+
+    .form-group input:focus{
+        outline:none;
+        border-color:#355ca8;
+        box-shadow:0 0 0 4px rgba(53,92,168,0.15);
+    }
+
+    .btn{
+        width:100%;
+        padding:14px;
+        border:none;
+        border-radius:12px;
+        background:linear-gradient(135deg,#1f3b73,#355ca8);
+        color:white;
+        font-size:16px;
+        font-weight:600;
+        cursor:pointer;
+        transition:0.3s;
+    }
+
+    .btn:hover{
+        transform:translateY(-2px);
+        box-shadow:0 8px 20px rgba(31,59,115,0.25);
+    }
+
+    .btn-secondary{
+        background:linear-gradient(135deg,#475569,#64748b);
+    }
+
+    .forgot-link{
+        display:inline-block;
+        margin-top:16px;
+        color:#355ca8;
+        text-decoration:none;
+        font-weight:600;
+    }
+
+    .forgot-link:hover{
+        text-decoration:underline;
+    }
+
+    .back-wrapper{
+        text-align:center;
+        margin-top:28px;
+    }
+
+    .back-btn{
+        display:inline-block;
+        padding:12px 28px;
+        border-radius:999px;
+        background:#e8eefc;
+        color:#1f3b73;
+        text-decoration:none;
+        font-weight:600;
+        transition:0.3s;
+    }
+
+    .back-btn:hover{
+        background:#d6e2ff;
+    }
+
+    @media(max-width:600px){
+
+        .profile-container{
+            padding:24px;
+        }
+
+        .profile-header h1{
+            font-size:1.7rem;
+        }
+
+        .section{
+            padding:18px;
+        }
+    }
+
+</style>
+```
+
 </head>
+
 <body>
 
-<div class="main-content">
+<div class="profile-container">
 
-```
-<div class="table-box" style="max-width:600px;margin:auto;">
-    <h2>My Profile</h2>
+<div class="profile-header">
 
-    <table>
-        <tr><th>Name</th><td>{{ user.name }}</td></tr>
-        <tr><th>Email</th><td>{{ user.email }}</td></tr>
-        <tr><th>City</th><td>{{ user.city }}</td></tr>
-        <tr><th>Gender</th><td>{{ user.gender }}</td></tr>
-        <tr><th>Role</th><td>{{ user.role }}</td></tr>
-    </table>
+    {% if user.profile_photo %}
+        <img src="{{ url_for('static', filename='uploads/' + user.profile_photo) }}"
+             class="profile-photo"
+             alt="Profile Photo">
+    {% else %}
+        <div class="default-photo">👤</div>
+    {% endif %}
 
-    <div style="text-align:center;">
-        <a href="{{ url_for('user_dashboard') }}" class="back-btn">← Back to Dashboard</a>
-    </div>
+    <h1>{{ user.name }}</h1>
+    <p>Employee Management System Profile</p>
+
 </div>
-```
+
+<div class="info-grid">
+
+    <div class="info-card">
+        <span>Email</span>
+        <strong>{{ user.email }}</strong>
+    </div>
+
+    <div class="info-card">
+        <span>City</span>
+        <strong>{{ user.city if user.city else 'Not Added' }}</strong>
+    </div>
+
+    <div class="info-card">
+        <span>Gender</span>
+        <strong>{{ user.gender if user.gender else 'Not Added' }}</strong>
+    </div>
+
+    <div class="info-card">
+        <span>Role</span>
+        <strong>{{ user.role | upper }}</strong>
+    </div>
+
+</div>
+
+<div class="section">
+
+    <h2>✏️ Update Profile</h2>
+
+    <form action="/update-profile" method="POST">
+
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text"
+                   name="name"
+                   value="{{ user.name }}"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label>City</label>
+            <input type="text"
+                   name="city"
+                   value="{{ user.city if user.city else '' }}"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label>Address</label>
+            <input type="text"
+                   name="address"
+                   value="{{ user.address if user.address else '' }}">
+        </div>
+
+        <button type="submit" class="btn">
+            Update Profile
+        </button>
+
+    </form>
+
+</div>
+
+<div class="section">
+
+    <h2>🖼️ Upload Profile Photo</h2>
+
+    <form action="/upload-photo"
+          method="POST"
+          enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label>Choose Photo</label>
+            <input type="file"
+                   name="photo"
+                   accept="image/*"
+                   required>
+        </div>
+
+        <button type="submit" class="btn btn-secondary">
+            Upload Photo
+        </button>
+
+    </form>
+
+</div>
+
+<div class="section">
+
+    <h2>🔒 Change Password</h2>
+
+    <form action="/change-password" method="POST">
+
+        <div class="form-group">
+            <label>Current Password</label>
+            <input type="password"
+                   name="old_password"
+                   placeholder="Enter current password"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label>New Password</label>
+            <input type="password"
+                   name="new_password"
+                   placeholder="Enter new password"
+                   required>
+        </div>
+
+        <button type="submit" class="btn">
+            Change Password
+        </button>
+
+    </form>
+
+    <a href="{{ url_for('forgot_password') }}" class="forgot-link">
+        Forgot Password?
+    </a>
+
+</div>
+
+<div class="back-wrapper">
+
+    {% if session.get('role') == 'admin' %}
+        <a href="{{ url_for('admin_dashboard') }}" class="back-btn">
+            ← Back to Dashboard
+        </a>
+    {% else %}
+        <a href="{{ url_for('user_dashboard') }}" class="back-btn">
+            ← Back to Dashboard
+        </a>
+    {% endif %}
+
+</div>
+
 
 </div>
 

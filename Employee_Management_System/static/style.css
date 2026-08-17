@@ -176,3 +176,44 @@ padding:25px;
 .card:hover{
     transform: translateY(-5px);
 }
+.edit-btn{
+    display:inline-block;
+    padding:8px 14px;
+    background:#1f3b73;
+    color:white;
+    text-decoration:none;
+    border-radius:6px;
+    font-size:14px;
+    margin-right:5px;
+}
+
+.edit-btn:hover{
+    background:#2d5ca6;
+}
+/* Employees page - Back to Dashboard button */
+
+.back-dashboard-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 24px;
+    margin:20px 0;
+    background:linear-gradient(135deg,#1f3b73,#355ca8);
+    color:#ffffff !important;
+    text-decoration:none !important;
+    font-size:15px;
+    font-weight:600;
+    border-radius:14px;
+    box-shadow:0 6px 18px rgba(31,59,115,0.22);
+    transition:all 0.3s ease;
+}
+
+.back-dashboard-btn:hover{
+    background:linear-gradient(135deg,#27498a,#4a6fc5);
+    transform:translateY(-2px);
+    box-shadow:0 10px 24px rgba(31,59,115,0.32);
+}
+
+.back-dashboard-btn:active{
+    transform:translateY(0);
+}

@@ -1,241 +1,124 @@
 <!DOCTYPE html>
+
 <html lang="en">
-
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Employee</title>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
 
-    <title>Edit Employee</title>
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f4f6f9;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
 
+.edit-box{
+    width:450px;
+    background:white;
+    padding:35px;
+    border-radius:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+}
 
-    <style>
+h2{
+    text-align:center;
+    color:#1f3b73;
+    margin-bottom:25px;
+}
 
-        body{
-            font-family: Arial, sans-serif;
-            background:#f4f6f9;
-        }
+label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:bold;
+    color:#333;
+}
 
+input{
+    width:100%;
+    padding:12px;
+    margin-bottom:18px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:15px;
+}
 
-        .container{
+input:focus{
+    outline:none;
+    border-color:#1f3b73;
+    box-shadow:0 0 5px rgba(31,59,115,0.25);
+}
 
-            width:400px;
-            margin:50px auto;
-            background:white;
-            padding:30px;
-            border-radius:10px;
-            box-shadow:0 0 10px gray;
+button{
+    width:100%;
+    padding:13px;
+    background:#1f3b73;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
 
-        }
+button:hover{
+    background:#2d5ca6;
+}
 
+.back{
+    display:block;
+    text-align:center;
+    margin-top:15px;
+    color:#1f3b73;
+    text-decoration:none;
+    font-weight:bold;
+}
 
-        h2{
+.back:hover{
+    text-decoration:underline;
+}
 
-            text-align:center;
-            color:#333;
-
-        }
-
-
-        input{
-
-            width:100%;
-            padding:12px;
-            margin:10px 0;
-            border:1px solid #ccc;
-            border-radius:5px;
-
-        }
-
-
-        button{
-
-            width:100%;
-            padding:12px;
-            background:#007bff;
-            color:white;
-            border:none;
-            border-radius:5px;
-            cursor:pointer;
-            font-size:16px;
-
-        }
-
-
-        button:hover{
-
-            background:#0056b3;
-
-        }
-
-
-    </style>
-
+</style>
 
 </head>
 
-
-
 <body>
 
+<div class="edit-box">
 
-
-<div class="container">
-
-
+```
 <h2>Edit Employee</h2>
 
+<form action="{{ url_for('update_employee', id=employee.id) }}" method="POST">
 
+    <label>Employee Name</label>
+    <input type="text" name="ename" value="{{ employee.ename }}" required>
 
-<input type="text" id="name" placeholder="Employee Name">
+    <label>Department</label>
+    <input type="text" name="department" value="{{ employee.department }}" required>
 
+    <label>Salary</label>
+    <input type="number" name="salary" value="{{ employee.salary }}" required>
 
-<input type="text" id="department" placeholder="Department">
+    <label>Email</label>
+    <input type="email" name="email" value="{{ employee.email }}" required>
 
+    <label>City</label>
+    <input type="text" name="city" value="{{ employee.city }}" required>
 
-<input type="number" id="salary" placeholder="Salary">
+    <button type="submit">Update Employee</button>
 
+</form>
 
-<input type="email" id="email" placeholder="Email">
-
-
-<input type="text" id="city" placeholder="City">
-
-
-<button onclick="updateEmployee()">
-
-Update Employee
-
-</button>
-
-
+<a href="{{ url_for('employees_page') }}" class="back">← Back to Employees</a>
+```
 
 </div>
 
-
-
-
-
-
-<script>
-
-
-// Get Employee ID
-
-let id = localStorage.getItem("emp_id");
-
-
-
-// Load Existing Employee Data
-
-fetch(`/get_employee/${id}`)
-
-
-.then(response=>response.json())
-
-
-.then(emp=>{
-
-
-document.getElementById("name").value = emp.Emp_Name;
-
-document.getElementById("department").value = emp.Department_Name;
-
-document.getElementById("salary").value = emp.Salary;
-
-document.getElementById("email").value = emp.Email;
-
-document.getElementById("city").value = emp.City;
-
-
-});
-
-
-
-
-
-
-
-// Update Employee
-
-
-function updateEmployee(){
-
-
-let data = {
-
-
-name:
-document.getElementById("name").value,
-
-
-department:
-document.getElementById("department").value,
-
-
-salary:
-document.getElementById("salary").value,
-
-
-email:
-document.getElementById("email").value,
-
-
-city:
-document.getElementById("city").value
-
-
-};
-
-
-
-
-fetch(`/update_employee/${id}`,{
-
-
-method:"PUT",
-
-
-headers:{
-
-
-"Content-Type":"application/json"
-
-
-},
-
-
-body:JSON.stringify(data)
-
-
-})
-
-
-
-.then(response=>response.json())
-
-
-.then(result=>{
-
-
-alert(result.message);
-
-
-window.location.href="/dashboard";
-
-
-});
-
-
-
-}
-
-
-
-</script>
-
-
-
 </body>
-
 </html>
