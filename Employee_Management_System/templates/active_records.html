@@ -112,7 +112,7 @@
     </table>
 
     <div style="text-align:center; margin-top:30px;">
-    <a href="{{ url_for('admin_dashboard') if session.get('role') == 'admin' else url_for('user_dashboard') }}"
+    <a href="{{ url_for('dashboard') if session.get('role') == 'admin' else url_for('user_dashboard') }}"
        style="
             display:inline-block;
             background:#1f3b73;

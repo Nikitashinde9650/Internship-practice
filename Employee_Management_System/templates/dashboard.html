@@ -1,193 +1,513 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Employee Dashboard</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='dashboard.css') }}">
+
 </head>
+
+
 <body>
 
 <div class="container">
 
-    <!-- Sidebar -->
+
+    <!-- ================= SIDEBAR ================= -->
+
     <div class="sidebar">
 
         <h2>EMS</h2>
 
         <ul>
-            <li><a href="{{ url_for('admin_dashboard') if session.get('role') == 'admin' else url_for('user_dashboard') }}">Back to Dashboard</a></li>
-            <li><a href="javascript:void(0)" onclick="viewProfile()">👤 View Profile</a></li>
-            <li><a href="/add_employee">➕ Add Employee</a></li>
-            <li><a href="/employees-page">👨 Employees</a></li>
-            <li><a href="/reports">📊 Reports</a></li>
-            <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+
+            <!-- Back to Dashboard -->
+
+            <li>
+                <a href="{{ url_for('dashboard') }}">
+                    🏠 Back to Dashboard
+                </a>
+            </li>
+
+
+            <!-- View Profile -->
+
+            <li>
+                <a href="javascript:void(0)"
+                   onclick="viewProfile()">
+                    👤 View Profile
+                </a>
+            </li>
+
+
+            <!-- Add Employee -->
+
+            <li>
+                <a href="/add_employee">
+                    ➕ Add Employee
+                </a>
+            </li>
+
+
+            <!-- Employees -->
+
+            <li>
+                <a href="/employees-page">
+                    👨 Employees
+                </a>
+            </li>
+
+
+            <!-- Reports -->
+
+            <li>
+                <a href="/reports">
+                    📊 Reports
+                </a>
+            </li>
+
+
+            <!-- Activity Logs -->
+
+            <li>
+                <a href="{{ url_for('activity_logs') }}">
+                    📋 Activity Logs
+                </a>
+            </li>
+
+
+            <!-- Logout -->
+
+            <li>
+                <a href="{{ url_for('logout') }}">
+                    🚪 Logout
+                </a>
+            </li>
+
         </ul>
 
     </div>
 
-    <!-- Main Content -->
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
     <div class="main-content">
 
-        <!-- Header -->
+
+        <!-- ================= HEADER ================= -->
+
         <div class="header">
-            <h1>Employee Dashboard</h1>
+
+            <h1>
+                Employee Dashboard
+            </h1>
+
         </div>
 
-        <!-- Welcome -->
+
+
+        <!-- ================= WELCOME BOX ================= -->
+
         <div class="welcome-box">
-            <h2>Welcome Admin 👋</h2>
-            <p>You have successfully logged in.</p>
+
+            <h2>
+                Welcome Admin 👋
+            </h2>
+
+            <p>
+                You have successfully logged in.
+            </p>
+
         </div>
 
-        <!-- Statistics Cards -->
+
+
+        <!-- ================= STATISTICS CARDS ================= -->
+
         <div class="cards">
 
+
             <!-- Total Employees -->
-            <a href="/employee-report" class="card-link">
+
+            <a href="/employee-report"
+               class="card-link">
+
                 <div class="card">
-                    <h3>Total Employees</h3>
-                    <h1>{{ total_employees }}</h1>
+
+                    <h3>
+                        Total Employees
+                    </h3>
+
+                    <h1>
+                        {{ total_employees }}
+                    </h1>
+
                 </div>
+
             </a>
 
-            <!-- department -->
-            <a href="/department-report" class="card-link">
+
+
+            <!-- Departments -->
+
+            <a href="/department-report"
+               class="card-link">
+
                 <div class="card">
-                    <h3>Departments</h3>
-                    <h1>{{ total_departments }}</h1>
+
+                    <h3>
+                        Departments
+                    </h3>
+
+                    <h1>
+                        {{ total_departments }}
+                    </h1>
+
                 </div>
+
             </a>
+
+
 
             <!-- Active Records -->
-            <a href="/active-records" class="card-link">
+
+            <a href="/active-records"
+               class="card-link">
+
                 <div class="card">
-                    <h3>Active Records</h3>
-                    <h1>{{ active_records }}</h1>
+
+                    <h3>
+                        Active Records
+                    </h3>
+
+                    <h1>
+                        {{ active_records }}
+                    </h1>
+
                 </div>
+
             </a>
 
         </div>
 
-        <!-- Recently Added Employees -->
-        <!-- Charts Section -->
-<div class="chart-container">
 
-    <div class="chart-box">
-        <h2>Employees by Department</h2>
-        <canvas id="employeeBarChart"></canvas>
-    </div>
 
-    <div class="chart-box">
-        <h2>Department Distribution</h2>
-        <canvas id="departmentPieChart"></canvas>
+        <!-- ================= ACTIVITY LOG CARD ================= -->
+
+        <div class="activity-log-card">
+
+            <div>
+
+                <h2>
+                    📋 Activity Logs
+                </h2>
+
+                <p>
+                    View login, logout, employee and
+                    other system activities.
+                </p>
+
+            </div>
+
+
+            <a href="{{ url_for('activity_logs') }}"
+               class="activity-btn">
+
+                View Activity Logs
+
+            </a>
+
+        </div>
+
+
+
+        <!-- ================= CHARTS ================= -->
+
+        <div class="chart-container">
+
+
+            <!-- Employee Bar Chart -->
+
+            <div class="chart-box">
+
+                <h2>
+                    Employees by Department
+                </h2>
+
+                <canvas id="employeeBarChart">
+                </canvas>
+
+            </div>
+
+
+
+            <!-- Department Pie Chart -->
+
+            <div class="chart-box">
+
+                <h2>
+                    Department Distribution
+                </h2>
+
+                <canvas id="departmentPieChart">
+                </canvas>
+
+            </div>
+
+        </div>
+
+
+
     </div>
 
 </div>
+
+
+
+<!-- ================= CHART.JS ================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
 <script>
+
+
+/* ================= DEPARTMENT DATA ================= */
 
 const labels = {{ labels | tojson }};
+
 const counts = {{ counts | tojson }};
 
-// ===== Bar Chart =====
-new Chart(document.getElementById('employeeBarChart'), {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Employees',
-            data: counts,
-            backgroundColor: [
-                '#14b8a6',
-                '#6366f1',
-                '#f59e0b',
-                '#ef4444',
-                '#10b981'
-            ],
-            borderColor: '#ffffff',
-            borderWidth: 2,
-            borderRadius: 8
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                display: false
-            }
+
+
+/* ================= BAR CHART ================= */
+
+new Chart(
+    document.getElementById('employeeBarChart'),
+    {
+
+        type: 'bar',
+
+        data: {
+
+            labels: labels,
+
+            datasets: [
+
+                {
+
+                    label: 'Employees',
+
+                    data: counts,
+
+                    backgroundColor: [
+
+                        '#14b8a6',
+                        '#6366f1',
+                        '#f59e0b',
+                        '#ef4444',
+                        '#10b981'
+
+                    ],
+
+                    borderColor: '#ffffff',
+
+                    borderWidth: 2,
+
+                    borderRadius: 8
+
+                }
+
+            ]
+
         },
-        scales: {
-            x: {
-                ticks: {
-                    color: '#0f172a',
-                    font: { size: 13, weight: '600' }
-                },
-                grid: {
-                    color: '#e2e8f0'
+
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+
+                    display: false
+
                 }
+
             },
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    color: '#0f172a',
-                    stepSize: 1,
-                    font: { size: 13, weight: '600' }
+
+
+            scales: {
+
+                x: {
+
+                    ticks: {
+
+                        color: '#0f172a',
+
+                        font: {
+
+                            size: 13,
+
+                            weight: '600'
+
+                        }
+
+                    },
+
+
+                    grid: {
+
+                        color: '#e2e8f0'
+
+                    }
+
                 },
-                grid: {
-                    color: '#e2e8f0'
+
+
+                y: {
+
+                    beginAtZero: true,
+
+                    ticks: {
+
+                        color: '#0f172a',
+
+                        stepSize: 1,
+
+                        font: {
+
+                            size: 13,
+
+                            weight: '600'
+
+                        }
+
+                    },
+
+
+                    grid: {
+
+                        color: '#e2e8f0'
+
+                    }
+
                 }
-            }
-        }
-    }
-});
 
-// ===== Pie Chart =====
-new Chart(document.getElementById('departmentPieChart'), {
-    type: 'pie',
-    data: {
-        labels: labels,
-        datasets: [{
-            data: counts,
-            backgroundColor: [
-                '#14b8a6',
-                '#6366f1',
-                '#f59e0b',
-                '#ef4444',
-                '#10b981'
-            ],
-            borderColor: '#ffffff',
-            borderWidth: 3
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: {
-                    color: '#0f172a',
-                    font: { size: 13, weight: '600' },
-                    padding: 15
+            }
+
+        }
+
+    }
+
+);
+
+
+
+/* ================= PIE CHART ================= */
+
+new Chart(
+    document.getElementById('departmentPieChart'),
+    {
+
+        type: 'pie',
+
+        data: {
+
+            labels: labels,
+
+            datasets: [
+
+                {
+
+                    data: counts,
+
+                    backgroundColor: [
+
+                        '#14b8a6',
+                        '#6366f1',
+                        '#f59e0b',
+                        '#ef4444',
+                        '#10b981'
+
+                    ],
+
+                    borderColor: '#ffffff',
+
+                    borderWidth: 3
+
                 }
+
+            ]
+
+        },
+
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+
+                    position: 'bottom',
+
+                    labels: {
+
+                        color: '#0f172a',
+
+                        font: {
+
+                            size: 13,
+
+                            weight: '600'
+
+                        },
+
+                        padding: 15
+
+                    }
+
+                }
+
             }
+
         }
+
     }
-});
 
-</script>
-    </div>
+);
 
-</div>
-<script>
 
-function viewProfile(){
-    window.location.href = "{{ url_for('my_profile') }}";
+
+/* ================= VIEW PROFILE ================= */
+
+function viewProfile() {
+
+    window.location.href =
+        "{{ url_for('my_profile') }}";
+
 }
 
+
 </script>
+
+
 </body>
+
 </html>

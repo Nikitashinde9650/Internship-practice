@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Activity Logs</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            width: 95%;
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        /* Filter Box */
+
+        .filter-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .filter-box form {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-box input,
+        .filter-box select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .search-btn {
+            padding: 10px 18px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            background: #0056b3;
+        }
+
+        .clear-btn {
+            padding: 10px 18px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .export-btn {
+            padding: 10px 18px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .export-btn:hover {
+            background: #218838;
+        }
+
+        /* Table */
+
+        .table-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #343a40;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
+
+        /* Pagination */
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .page-btn {
+            padding: 8px 15px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .page-btn:hover {
+            background: #0056b3;
+        }
+
+        .page-info {
+            font-weight: bold;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h2>Activity Logs</h2>
+
+    <a href="{{ url_for('dashboard') }}"
+   style="
+       display: inline-flex;
+       align-items: center;
+       gap: 8px;
+       margin-bottom: 25px;
+       padding: 12px 22px;
+       background-color: #1d3d77;
+       color: white;
+       text-decoration: none;
+       border-radius: 8px;
+       font-size: 16px;
+       font-weight: 600;
+       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+       cursor: pointer;
+   ">
+    ← Back to Dashboard
+    </a>
+    <!-- Search & Filter -->
+
+    <div class="filter-box">
+
+        <form method="GET"
+              action="{{ url_for('activity_logs') }}">
+
+            <!-- Email -->
+
+            <input
+                type="text"
+                name="email"
+                placeholder="Search by email"
+                value="{{ email }}"
+            >
+
+
+            <!-- Action -->
+
+            <select name="action">
+
+                <option value="">All Actions</option>
+
+                <option value="LOGIN"
+                    {% if action == 'LOGIN' %}selected{% endif %}>
+                    LOGIN
+                </option>
+
+                <option value="LOGOUT"
+                    {% if action == 'LOGOUT' %}selected{% endif %}>
+                    LOGOUT
+                </option>
+
+                <option value="REGISTER"
+                    {% if action == 'REGISTER' %}selected{% endif %}>
+                    REGISTER
+                </option>
+
+                <option value="CREATE"
+                    {% if action == 'CREATE' %}selected{% endif %}>
+                    CREATE
+                </option>
+
+                <option value="UPDATE"
+                    {% if action == 'UPDATE' %}selected{% endif %}>
+                    UPDATE
+                </option>
+
+                <option value="DELETE"
+                    {% if action == 'DELETE' %}selected{% endif %}>
+                    DELETE
+                </option>
+
+                <option value="PASSWORD CHANGE"
+                    {% if action == 'PASSWORD CHANGE' %}selected{% endif %}>
+                    PASSWORD CHANGE
+                </option>
+
+            </select>
+
+
+            <!-- Date -->
+
+            <input
+                type="date"
+                name="date"
+                value="{{ date }}"
+            >
+
+
+            <!-- Search -->
+
+            <button type="submit" class="search-btn">
+                Search
+            </button>
+
+
+            <!-- Clear -->
+
+            <a
+                href="{{ url_for('activity_logs') }}"
+                class="clear-btn">
+                Clear
+            </a>
+
+
+            <!-- Export -->
+
+            <a
+                href="{{ url_for(
+                    'export_activity_logs',
+                    email=email,
+                    action=action,
+                    date=date
+                ) }}"
+                class="export-btn">
+
+                Export CSV
+
+            </a>
+
+        </form>
+
+    </div>
+
+
+    <!-- Table -->
+
+    <div class="table-box">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>User ID</th>
+                    <th>User Email</th>
+                    <th>Action</th>
+                    <th>Description</th>
+                    <th>IP Address</th>
+                    <th>Date & Time</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for log in logs %}
+
+                <tr>
+
+                    <td>{{ log.id }}</td>
+
+                    <td>{{ log.user_id }}</td>
+
+                    <td>{{ log.user_email }}</td>
+
+                    <td>{{ log.action }}</td>
+
+                    <td>{{ log.description }}</td>
+
+                    <td>{{ log.ip_address }}</td>
+
+                    <td>{{ log.created_at }}</td>
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="7" class="no-data">
+
+                        No activity logs found
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+        <!-- Pagination -->
+
+        {% if pagination.pages > 1 %}
+
+        <div class="pagination">
+
+            <!-- Previous -->
+
+            {% if pagination.has_prev %}
+
+            <a
+                class="page-btn"
+                href="{{ url_for(
+                    'activity_logs',
+                    page=pagination.prev_num,
+                    email=email,
+                    action=action,
+                    date=date
+                ) }}">
+
+                ← Previous
+
+            </a>
+
+            {% endif %}
+
+
+            <!-- Page Number -->
+
+            <span class="page-info">
+
+                Page {{ pagination.page }}
+                of
+                {{ pagination.pages }}
+
+            </span>
+
+
+            <!-- Next -->
+
+            {% if pagination.has_next %}
+
+            <a
+                class="page-btn"
+                href="{{ url_for(
+                    'activity_logs',
+                    page=pagination.next_num,
+                    email=email,
+                    action=action,
+                    date=date
+                ) }}">
+
+                Next →
+
+            </a>
+
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

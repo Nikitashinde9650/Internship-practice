@@ -124,7 +124,7 @@
 
 <h1>Employee List</h1>
 
-<a href="{{ url_for('admin_dashboard') }}" class="back-dashboard-btn">
+<a href="{{ url_for('dashboard') }}" class="back-dashboard-btn">
     ← Back to Dashboard
 </a>
 </div>
@@ -310,6 +310,21 @@ window.location.href="/edit_employee";
 }
 
 </script>
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+
+        {% for category, message in messages %}
+
+            <script>
+                alert({{ message | tojson }});
+            </script>
+
+        {% endfor %}
+
+    {% endif %}
+
+{% endwith %}
 
 </body>
 </html>

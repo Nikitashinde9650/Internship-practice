@@ -315,3 +315,47 @@ table tr:hover{
     transform:translateY(-2px);
     box-shadow:0 10px 24px rgba(31,59,115,0.32);
 }
+/* ================= ACTIVITY LOG CARD ================= */
+
+.activity-log-card {
+    background: white;
+    margin: 25px 0;
+    padding: 20px 25px;
+    border-radius: 12px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+
+.activity-log-card h2 {
+    margin: 0 0 8px 0;
+}
+
+
+.activity-log-card p {
+    margin: 0;
+    color: #64748b;
+}
+
+
+.activity-btn {
+    background: #6366f1;
+    color: white;
+
+    padding: 11px 20px;
+
+    text-decoration: none;
+
+    border-radius: 7px;
+
+    font-weight: 600;
+}
+
+
+.activity-btn:hover {
+    background: #4f46e5;
+}

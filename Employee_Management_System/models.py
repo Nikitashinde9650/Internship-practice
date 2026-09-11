@@ -61,4 +61,23 @@ class User(db.Model):
             "city": self.city,
             "gender": self.gender
         }
-   
+class ActivityLog(db.Model):
+
+    __tablename__ = "activity_logs"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(db.Integer, nullable=True)
+
+    user_email = db.Column(db.String(150))
+
+    action = db.Column(db.String(50), nullable=False)
+
+    description = db.Column(db.String(255))
+
+    ip_address = db.Column(db.String(50))
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.now
+    )

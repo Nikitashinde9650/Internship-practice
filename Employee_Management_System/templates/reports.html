@@ -6,89 +6,216 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+      content="width=device-width, initial-scale=1.0">
 
-<title>Reports</title>
+<title>Reports Dashboard</title>
 
 <style>
 
-body{
+* {
+    box-sizing: border-box;
+}
 
-font-family:Arial;
+body {
 
-background:#f4f6f9;
+    font-family: Arial, sans-serif;
 
-margin:0;
+    background: #f4f6f9;
+
+    margin: 0;
 
 }
 
-.container{
+.container {
 
-width:90%;
+    width: 90%;
 
-margin:40px auto;
-
-}
-
-h1{
-
-color:#1d3d77;
+    margin: 40px auto;
 
 }
 
-.cards{
+h1 {
 
-display:flex;
+    color: #1d3d77;
 
-gap:20px;
+    font-size: 38px;
 
-margin-top:30px;
-
-}
-
-.card{
-
-flex:1;
-
-background:white;
-
-padding:30px;
-
-text-align:center;
-
-box-shadow:0 0 10px lightgray;
-
-border-radius:10px;
+    margin-bottom: 20px;
 
 }
 
-.card h2{
 
-color:#1d3d77;
+/* ================= BACK BUTTON ================= */
+
+.back-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 10px;
+
+    margin-bottom: 20px;
+
+    background: #1d3d77;
+
+    color: white;
+
+    padding: 11px 20px;
+
+    text-decoration: none;
+
+    border-radius: 7px;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    transition: all 0.3s ease;
 
 }
 
-.card h1{
+.back-btn:hover {
 
-font-size:45px;
+    background: #15305f;
+
+    transform: translateX(-3px);
+
+    box-shadow: 0 5px 12px rgba(0,0,0,0.18);
 
 }
 
-.back-btn{
+.back-btn:active {
 
-display:inline-block;
+    transform: scale(0.97);
 
-margin-top:20px;
+}
 
-background:#1d3d77;
 
-color:white;
+/* ================= CARDS ================= */
 
-padding:10px 20px;
+.cards {
 
-text-decoration:none;
+    display: flex;
 
-border-radius:5px;
+    gap: 25px;
+
+    margin-top: 20px;
+
+}
+
+
+/* Card Link */
+
+.card-link {
+
+    flex: 1;
+
+    text-decoration: none;
+
+    color: inherit;
+
+}
+
+
+/* Card */
+
+.card {
+
+    background: white;
+
+    padding: 55px 30px;
+
+    text-align: center;
+
+    box-shadow: 0 5px 18px rgba(0,0,0,0.12);
+
+    border-radius: 15px;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+
+}
+
+
+/* Hover */
+
+.card:hover {
+
+    transform: translateY(-6px);
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+
+}
+
+
+/* Heading */
+
+.card h2 {
+
+    color: #1d3d77;
+
+    font-size: 30px;
+
+    margin-bottom: 30px;
+
+}
+
+
+/* Number */
+
+.card h1 {
+
+    color: #1d3d77;
+
+    font-size: 58px;
+
+    margin: 0;
+
+}
+
+
+/* Click text */
+
+.click-text {
+
+    display: block;
+
+    margin-top: 18px;
+
+    color: #777;
+
+    font-size: 14px;
+
+    transition: 0.3s;
+
+}
+
+.card:hover .click-text {
+
+    color: #1d3d77;
+
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 700px) {
+
+    .cards {
+
+        flex-direction: column;
+
+    }
+
+    .card {
+
+        padding: 40px 20px;
+
+    }
 
 }
 
@@ -96,35 +223,89 @@ border-radius:5px;
 
 </head>
 
+
 <body>
+
 
 <div class="container">
 
-<h1>Reports Dashboard</h1>
 
-<a href="{{ url_for('admin_dashboard') if session.get('role') == 'admin' else url_for('user_dashboard') }}">Back to Dashboard</a>
+    <!-- ================= TITLE ================= -->
 
-<div class="cards">
+    <h1>
+        Reports Dashboard
+    </h1>
 
-<div class="card">
 
-<h2>Total Employees</h2>
+    <!-- ================= BACK BUTTON ================= -->
 
-<h1>{{total_employees}}</h1>
+    <a href="{{ url_for('dashboard') }}"
+       class="back-btn">
+
+        ← Back to Dashboard
+
+    </a>
+
+
+    <!-- ================= REPORT CARDS ================= -->
+
+    <div class="cards">
+
+
+        <!-- ================= TOTAL EMPLOYEES ================= -->
+
+        <a href="{{ url_for('employee_report') }}"
+           class="card-link">
+
+            <div class="card">
+
+                <h2>
+                    Total Employees
+                </h2>
+
+                <h1>
+                    {{ total_employees }}
+                </h1>
+
+                <span class="click-text">
+                    Click to view employee details →
+                </span>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- ================= TOTAL USERS ================= -->
+
+        <a href="{{ url_for('user_report') }}"
+           class="card-link">
+
+            <div class="card">
+
+                <h2>
+                    Total Users
+                </h2>
+
+                <h1>
+                    {{ total_users }}
+                </h1>
+
+                <span class="click-text">
+                    Click to view user details →
+                </span>
+
+            </div>
+
+        </a>
+
+
+    </div>
+
 
 </div>
 
-<div class="card">
-
-<h2>Total Users</h2>
-
-<h1>{{total_users}}</h1>
-
-</div>
-
-</div>
-
-</div>
 
 </body>
 
