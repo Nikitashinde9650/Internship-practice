@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from datetime import datetime
 from config import Config
 from models import db, Employee, User
@@ -17,13 +17,27 @@ with app.app_context():
 
 
 # -------------------------------
-# Home API
+# Home Page
 # -------------------------------
 @app.route("/")
 def home():
-    return jsonify({
-        "message": "Employee Management REST API Running Successfully"
-    })
+    return render_template("login.html")
+
+
+# -------------------------------
+# Login UI
+# -------------------------------
+@app.route("/login-page")
+def login_page():
+    return render_template("login.html")
+
+
+# -------------------------------
+# Register UI
+# -------------------------------
+@app.route("/register-page")
+def register_page():
+    return render_template("register.html")
 
 
 # -------------------------------
@@ -110,6 +124,7 @@ def register():
         }), 201
 
     except Exception as e:
+
         db.session.rollback()
 
         return jsonify({
@@ -160,8 +175,9 @@ def logout():
     return jsonify({
         "message": "Logout Successful"
     }), 200
+
+
 # -------------------------------
-# # -------------------------------
 # Add Employee
 # -------------------------------
 @app.route("/employees", methods=["POST"])
@@ -219,6 +235,7 @@ def add_employee():
         }), 201
 
     except Exception as e:
+
         db.session.rollback()
 
         return jsonify({
@@ -277,12 +294,12 @@ def update_employee(id):
         })
 
     except Exception as e:
+
         db.session.rollback()
 
         return jsonify({
             "message": str(e)
         }), 500
-
 
 # -------------------------------
 # Delete Employee
@@ -307,12 +324,12 @@ def delete_employee(id):
         })
 
     except Exception as e:
+
         db.session.rollback()
 
         return jsonify({
             "message": str(e)
         }), 500
-
 
 # -------------------------------
 # Run Application
